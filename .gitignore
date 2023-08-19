@@ -1,0 +1,5 @@
+/target/*
+/Cargo.lock
+/configs.toml
+/.idea/sonarlint/*
+/credentials.json

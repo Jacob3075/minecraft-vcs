@@ -1,0 +1,12 @@
+[package]
+name = "minecraft-vcs"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio = { version = "1.0.0", features = ["rt", "rt-multi-thread", "macros"] }
+oauth2 = "4.4.1"
+figment = { version = "0.10.10", features = ["toml"] }
+serde = "*"
