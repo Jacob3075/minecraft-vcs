@@ -1,5 +1,6 @@
 /target/*
 /Cargo.lock
-/configs.toml
+/configs/configs.toml
 /.idea/sonarlint/*
-/credentials.json
+/configs/credentials.json
+/configs/tokencache.json

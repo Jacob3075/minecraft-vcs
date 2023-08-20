@@ -1,16 +1,16 @@
-use figment::Figment;
 use figment::providers::{Format, Toml};
+use figment::Figment;
 use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct Config {
-    pub api_keys: ApiKeys,
+    pub authentication: Authentication,
     pub rustc: Option<String>,
     pub rustdoc: Option<String>,
 }
 
 #[derive(Deserialize)]
-pub struct ApiKeys {
+pub struct Authentication {
     pub client_id: String,
     pub client_secret: String,
     pub redirect_uri: String,
@@ -21,7 +21,7 @@ pub struct ApiKeys {
 
 pub fn get_config_values() -> Config {
     return Figment::new()
-        .merge(Toml::file("configs.toml"))
+        .merge(Toml::file("configs/configs.toml"))
         .extract()
-        .unwrap()
+        .unwrap();
 }

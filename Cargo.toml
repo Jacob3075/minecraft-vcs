@@ -7,6 +7,6 @@ edition = "2021"
 
 [dependencies]
 tokio = { version = "1.0.0", features = ["rt", "rt-multi-thread", "macros"] }
-oauth2 = "4.4.1"
 figment = { version = "0.10.10", features = ["toml"] }
 serde = "*"
+yup-oauth2 = "8.3.0"
