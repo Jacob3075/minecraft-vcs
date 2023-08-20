@@ -4,19 +4,13 @@ use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct Config {
-    pub authentication: Authentication,
-    pub rustc: Option<String>,
-    pub rustdoc: Option<String>,
+    pub  credentials: Credentials,
 }
 
 #[derive(Deserialize)]
-pub struct Authentication {
-    pub client_id: String,
-    pub client_secret: String,
-    pub redirect_uri: String,
-    pub auth_url: String,
-    pub token_url: String,
-    pub revocation_uri: String,
+pub  struct Credentials {
+    pub secrets_location: String,
+    pub cache_location: String,
 }
 
 pub fn get_config_values() -> Config {
