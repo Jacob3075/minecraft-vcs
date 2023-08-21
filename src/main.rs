@@ -1,14 +1,14 @@
-use crate::configuration::get_config_values;
-use authentication::get_token;
+use clap::Parser;
+use serde::{Deserialize, Serialize};
 
+use crate::arguments::Arguments;
+
+mod arguments;
 mod authentication;
 mod configuration;
+mod drive;
 
-#[tokio::main]
-async fn main() {
-    let config = get_config_values();
-    let token = get_token(config.credentials)
-        .await
-        .expect("could not get token");
-    dbg!(token);
+fn main() {
+    let args = Arguments::parse();
+    dbg!(args);
 }
