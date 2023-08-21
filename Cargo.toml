@@ -10,3 +10,4 @@ tokio = { version = "1.0.0", features = ["rt", "rt-multi-thread", "macros"] }
 figment = { version = "0.10.10", features = ["toml"] }
 serde = "*"
 yup-oauth2 = "8.3.0"
+clap = { version = "4.3.23", features = ["derive"] }
