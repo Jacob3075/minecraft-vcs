@@ -1,6 +1,7 @@
 use reqwest::Url;
 use yup_oauth2::AccessToken;
 
+use crate::configuration::Config;
 use crate::drive::models::{CreateFolderResponse, FileCreationData, FileDetails, FileList};
 
 pub async fn find_vcs_folder_in_remote(token: &AccessToken) -> Result<Vec<FileDetails>, String> {
@@ -58,4 +59,29 @@ pub async fn create_folder_in_drive(token: &AccessToken) -> CreateFolderResponse
 
     return response;
     // dbg!(response);
+}
+
+pub async fn check_if_folder_exists(configs: &Config, token: &AccessToken) -> bool {
+    if configs.remote_root_id.is_empty() {
+        return false;
+    }
+
+    let client = reqwest::Client::new();
+    let access_token = token.token().unwrap().to_string();
+
+    let response = client
+        .get(format!(
+            "https://www.googleapis.com/drive/v3/files/{}",
+            configs.remote_root_id
+        ))
+        .header("Authorization", format!("Bearer {}", access_token))
+        .send()
+        .await;
+
+    let status_code = response.unwrap().status();
+    return if status_code.is_success() {
+        true
+    } else {
+        false
+    };
 }
