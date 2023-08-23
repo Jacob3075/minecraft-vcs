@@ -1,6 +1,6 @@
 use yup_oauth2::AccessToken;
 use crate::configuration::Config;
-use crate::drive::{create_folder_in_drive, find_vcs_folder_in_remote};
+use crate::drive::drive::{create_folder_in_drive, find_vcs_folder_in_remote};
 
 /// - check if minecraft-vcs folder exists
 ///   - create minecraft-vcs folder and update config with folder id

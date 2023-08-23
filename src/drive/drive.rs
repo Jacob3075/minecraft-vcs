@@ -1,6 +1,6 @@
 use reqwest::Url;
-use serde::{Deserialize, Serialize};
 use yup_oauth2::AccessToken;
+use crate::drive::models::{CreateFolderResponse, FileCreationData, FileDetails, FileList};
 
 pub async fn find_vcs_folder_in_remote(token: &AccessToken) -> Result<Vec<FileDetails>, String> {
     let client = reqwest::Client::new();
@@ -57,35 +57,4 @@ pub async fn create_folder_in_drive(token: &AccessToken) -> CreateFolderResponse
 
     return response;
     // dbg!(response);
-}
-#[derive(Serialize, Deserialize)]
-struct FileCreationData {
-    #[serde(rename = "mimeType")]
-    pub mime_type: String,
-    pub name: String,
-    pub parents: Vec<String>,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct FileDetails {
-    pub kind: String,
-    #[serde(rename = "mimeType")]
-    pub mime_type: String,
-    pub id: String,
-    pub name: String,
-}
-
-#[derive(Serialize, Deserialize)]
-struct FileList {
-    pub kind: String,
-    pub files: Vec<FileDetails>,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct CreateFolderResponse {
-    pub kind: String,
-    pub id: String,
-    pub name: String,
-    #[serde(rename = "mimeType")]
-    pub mime_type: String,
 }
