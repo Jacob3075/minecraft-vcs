@@ -6,12 +6,12 @@ pub async fn find_vcs_folder_in_remote(token: &AccessToken) -> Result<Vec<FileDe
     let client = reqwest::Client::new();
     let access_token = token.token().expect("cannot get access token").to_string();
 
-    // TODO: ENABLE SEARCHING SHARED FOLDERS
+    // TODO: ENABLE SEARCHING SHARED FOLDERS AND DISABLE TRASHED FILES
     let url = Url::parse_with_params(
         "https://www.googleapis.com/drive/v3/files/",
         &[(
             "q",
-            "name = 'minecraft-vcs' and mimeType = 'application/vnd.google-apps.folder'",
+            "name = 'minecraft-vcs' and mimeType = 'application/vnd.google-apps.folder' and trashed = false",
         )],
     )
     .expect("could not parse url");
@@ -32,7 +32,7 @@ pub async fn find_vcs_folder_in_remote(token: &AccessToken) -> Result<Vec<FileDe
     };
 }
 
-pub async fn create_folder_in_drive(token: &AccessToken) {
+pub async fn create_folder_in_drive(token: &AccessToken) -> CreateFolderResponse {
     let client = reqwest::Client::new();
     let access_token = token.token().unwrap().to_string();
 
@@ -42,16 +42,20 @@ pub async fn create_folder_in_drive(token: &AccessToken) {
         parents: vec![],
     };
 
+    let request_body = serde_json::to_string(&data).expect("failed to serialize json data");
+
     let response = client
         .post("https://www.googleapis.com/drive/v3/files/")
         .header("Authorization", format!("Bearer {}", access_token))
-        .body(serde_json::to_string(&data).unwrap())
+        .body(request_body)
         .send()
         .await
         .expect("failed to create folder")
-        .json::<FileList>()
-        .await;
+        .json::<CreateFolderResponse>()
+        .await
+        .expect("failed to decode json response");
 
+    return response;
     // dbg!(response);
 }
 #[derive(Serialize, Deserialize)]
@@ -74,7 +78,14 @@ pub struct FileDetails {
 #[derive(Serialize, Deserialize)]
 struct FileList {
     pub kind: String,
-    #[serde(rename = "incompleteSearch")]
-    pub incomplete_search: bool,
     pub files: Vec<FileDetails>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct CreateFolderResponse {
+    pub kind: String,
+    pub id: String,
+    pub name: String,
+    #[serde(rename = "mimeType")]
+    pub mime_type: String,
 }

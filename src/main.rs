@@ -1,6 +1,9 @@
 extern crate core;
 
 use clap::Parser;
+use serde::{Deserialize, Serialize};
+use std::process::id;
+use tokio::select;
 use yup_oauth2::AccessToken;
 
 use errors::AppErrors;
@@ -50,6 +53,7 @@ async fn handle_command(args: Arguments, config: Config, token: AccessToken) {
 /// - check if folder with world name exists in vcs folder
 ///   - create if not exists
 async fn handle_init_command(configs: &Config, token: &AccessToken) {
+    // TODO: CHECK IF FOLDER ACTUALLY EXISTS
     if configs.remote_root_id.is_empty() {
         println!("folder id for vcs remote folder not set");
     } else {
@@ -58,7 +62,7 @@ async fn handle_init_command(configs: &Config, token: &AccessToken) {
             configs.remote_root_id
         );
 
-        // return;
+        return;
     }
 
     println!("searching for folder in drive with name `minecraft-vcs`");
@@ -67,14 +71,26 @@ async fn handle_init_command(configs: &Config, token: &AccessToken) {
 
     if files.is_empty() {
         println!("no vcs folder found, creating one");
-        create_folder_in_drive(&token).await;
+        let created_folder = create_folder_in_drive(&token).await;
+
+        println!(
+            "created folder with name: {}, id: {}",
+            created_folder.name, created_folder.id
+        );
+
+        println!("update config.toml with folder id");
+        return;
     };
 
     if files.len() > 1 {
         println!();
-        println!("** more than one vcs folder found, please select appropriate one **");
+        println!(
+            "** more than one vcs folder found, please update config.toml with appropriate one **"
+        );
         println!();
     }
+
+    println!("update config.toml with folder id");
 
     files
         .iter()
