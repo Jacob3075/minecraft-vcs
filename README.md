@@ -21,7 +21,7 @@ Options:
 
 ## Sample config file
 
-Place config file (`config.toml`) in the same directory as the executable. Path values in data file are relative
+Place config file (`config.toml`) in the same directory as the executable. Path values in config file are relative
 to the executable.
 
 ```toml
@@ -39,7 +39,7 @@ cache_location = "some/path"
 ```
 - minecraft-vcs
 - configs.toml
-- data
+- data/
    - credentials.json
    - tokencache.json
 ```
