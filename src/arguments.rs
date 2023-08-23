@@ -9,7 +9,7 @@ pub struct Arguments {
 
 #[derive(Subcommand, Debug)]
 pub enum Commands {
-    /// initialize folder structure on remote and setup local db for key-value pairs
+    /// initialize folder structure on remote
     INIT,
     /// get latest version of world from remote
     PULL,
