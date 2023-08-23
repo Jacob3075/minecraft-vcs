@@ -1,5 +1,5 @@
-use figment::providers::{Format, Toml};
 use figment::Figment;
+use figment::providers::{Format, Toml};
 use serde::Deserialize;
 
 #[derive(Deserialize)]
@@ -17,9 +17,8 @@ pub struct Credentials {
     pub cache_location: String,
 }
 
-pub fn get_config_values() -> Config {
-    return Figment::new()
+pub fn get_config_values() -> figment::error::Result<Config> {
+    Figment::new()
         .merge(Toml::file("configs/configs.toml"))
         .extract()
-        .unwrap();
 }

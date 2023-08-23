@@ -1,13 +1,12 @@
 use crate::configuration::Credentials;
 use yup_oauth2::{AccessToken, Error, InstalledFlowAuthenticator, InstalledFlowReturnMethod};
 
-pub async fn get_token(credentials: Credentials) -> Result<AccessToken, Error> {
-    let secret = yup_oauth2::read_application_secret(credentials.secrets_location)
-        .await
-        .expect("credentials.json");
+pub async fn get_token(credentials: &Credentials) -> Result<AccessToken, Error> {
+    let secret = yup_oauth2::read_application_secret(&credentials.secrets_location)
+        .await?;
 
     let auth = InstalledFlowAuthenticator::builder(secret, InstalledFlowReturnMethod::HTTPRedirect)
-        .persist_tokens_to_disk(credentials.cache_location)
+        .persist_tokens_to_disk(&credentials.cache_location)
         .build()
         .await
         .unwrap();
