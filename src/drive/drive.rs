@@ -8,7 +8,6 @@ pub async fn find_vcs_folder_in_remote(token: &AccessToken) -> Result<Vec<FileDe
     let client = reqwest::Client::new();
     let access_token = token.token().expect("cannot get access token").to_string();
 
-    // TODO: ENABLE SEARCHING SHARED FOLDERS AND DISABLE TRASHED FILES
     let url = Url::parse_with_params(
         "https://www.googleapis.com/drive/v3/files/",
         &[(
@@ -21,6 +20,7 @@ pub async fn find_vcs_folder_in_remote(token: &AccessToken) -> Result<Vec<FileDe
     let response = client
         .get(url)
         .header("Authorization", format!("Bearer {}", access_token))
+        .header("supportsAllDrives", "true")
         .send()
         .await;
 
@@ -49,6 +49,7 @@ pub async fn create_folder_in_drive(token: &AccessToken) -> CreateFolderResponse
     let response = client
         .post("https://www.googleapis.com/drive/v3/files/")
         .header("Authorization", format!("Bearer {}", access_token))
+        .header("supportsAllDrives", "true")
         .body(request_body)
         .send()
         .await
@@ -75,6 +76,7 @@ pub async fn check_if_folder_exists(configs: &Config, token: &AccessToken) -> bo
             configs.remote_root_id
         ))
         .header("Authorization", format!("Bearer {}", access_token))
+        .header("supportsAllDrives", "true")
         .send()
         .await;
 
