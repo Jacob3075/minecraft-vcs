@@ -1,4 +1,4 @@
-use clap::{Args, Parser, Subcommand};
+use clap::{Parser, Subcommand};
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -9,6 +9,8 @@ pub struct Arguments {
 
 #[derive(Subcommand, Debug)]
 pub enum Commands {
+    /// initialize folder structure on remote and setup local db for key-value pairs
+    INIT,
     /// get latest version of world from remote
     PULL,
     /// push latest version of world to remote
